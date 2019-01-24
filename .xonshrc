@@ -3,6 +3,8 @@ $COMPLETIONS_CONFIRM = False
 
 #Environment Variables:
 $WORK = "/home/koalasthegreat/Dropbox/Winter_2019/"
+$WORKW = "/mnt/c/Users/Andrew/Dropbox/Winter_2019/"
 
 #Custom Aliases:
 aliases["work"] = "cd $WORK"
+aliases["workw"] = "cd $WORKW"
