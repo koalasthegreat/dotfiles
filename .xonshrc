@@ -8,3 +8,9 @@ $WORKW = "/mnt/c/Users/Andrew/Dropbox/Winter_2019/"
 #Custom Aliases:
 aliases["work"] = "cd $WORK"
 aliases["workw"] = "cd $WORKW"
+aliases["compilemd"] = _markdown
+
+#Functions
+def _markdown(file):
+   file = file[0].split(".")[0]
+   hercule @(file + ".md") | pandoc -o @(file + ".pdf")
