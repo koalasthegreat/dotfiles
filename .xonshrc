@@ -1,3 +1,6 @@
+#Imports:
+import platform
+
 $CASE_SENSITIVE_COMPLETIONS = False
 $COMPLETIONS_CONFIRM = False
 
@@ -11,6 +14,9 @@ def _markdown(file):
    hercule @(file + ".md") | pandoc -o @(file + ".pdf")
 
 #Custom Aliases:
-aliases["work"] = "cd $WORK"
-aliases["workw"] = "cd $WORKW"
+if platform.system() == "Windows":
+   aliases["work"] = "cd $WORKW"
+else:
+   aliases["work"] = "cd $WORK"
+
 aliases["compilemd"] = _markdown
