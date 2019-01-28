@@ -1,5 +1,6 @@
 #Imports:
 import platform
+import os
 
 $CASE_SENSITIVE_COMPLETIONS = False
 $COMPLETIONS_CONFIRM = False
@@ -13,6 +14,20 @@ def _markdown(file):
    file = file[0].split(".")[0]
    hercule @(file + ".md") | pandoc -o @(file + ".pdf")
 
+def _work_on(args):
+   name = args[0]
+   locations = [
+      r"/home/koalasthegreat/Dropbox",
+      r"/home/koalasthegreat/Code",
+   ]
+   for location in locations:
+      if not os.path.isdir(location):
+         continue
+      for dirpath, _, __ in os.walk(location):
+         if dirpath.endswith(name):
+               cd @(dirpath)
+               return
+
 #Custom Aliases:
 if platform.system() == "Windows":
    aliases["work"] = "cd $WORKW"
@@ -20,3 +35,4 @@ else:
    aliases["work"] = "cd $WORK"
 
 aliases["compilemd"] = _markdown
+aliases["workon"] = _work_on
