@@ -25,6 +25,11 @@ def _work_on(args):
          continue
       for dirpath, _, __ in os.walk(location):
          if dirpath.endswith(name):
+            if len(args) > 1:
+               cd @(dirpath)
+               @(args[1]) @(dirpath)
+               return
+            else:
                cd @(dirpath)
                return
 
