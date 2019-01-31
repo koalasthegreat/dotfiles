@@ -5,7 +5,7 @@ import os
 #Xonsh Settings:
 $CASE_SENSITIVE_COMPLETIONS = False
 $COMPLETIONS_CONFIRM = False
-$DYNAMIC_CWD_WIDTH='40%'
+$DYNAMIC_CWD_WIDTH='25%'
 
 #Environment Variables:
 $WORK = "/home/koalasthegreat/Dropbox/Winter_2019/"
