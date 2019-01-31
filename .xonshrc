@@ -2,8 +2,10 @@
 import platform
 import os
 
+#Xonsh Settings:
 $CASE_SENSITIVE_COMPLETIONS = False
 $COMPLETIONS_CONFIRM = False
+$DYNAMIC_CWD_WIDTH='40%'
 
 #Environment Variables:
 $WORK = "/home/koalasthegreat/Dropbox/Winter_2019/"
@@ -17,8 +19,8 @@ def _markdown(file):
 def _work_on(args):
    name = args[0]
    locations = [
-      r"/home/koalasthegreat/Dropbox",
-      r"/home/koalasthegreat/Code",
+      "/home/koalasthegreat/Dropbox",
+      "/home/koalasthegreat/Code",
    ]
    for location in locations:
       if not os.path.isdir(location):
