@@ -1,15 +1,17 @@
 #Imports:
 import platform
 import os
+import xonsh
 
 #Xonsh Settings:
 $CASE_SENSITIVE_COMPLETIONS = False
 $COMPLETIONS_CONFIRM = False
 $DYNAMIC_CWD_WIDTH='25%'
+$XONSH_SHOW_TRACEBACK=True
 
 #Environment Variables:
 $WORK = "/home/koalasthegreat/Dropbox/Winter_2019/"
-$WORKW = "/mnt/c/Users/Andrew/Dropbox/Winter_2019/"
+$WORKW = "C:/Users/Andrew/Dropbox/Winter_2019/"
 
 #Functions
 def _markdown(file):
@@ -18,10 +20,15 @@ def _markdown(file):
 
 def _work_on(args):
    name = args[0]
-   locations = [
-      "/home/koalasthegreat/Dropbox",
-      "/home/koalasthegreat/Code",
-   ]
+   locations = []
+
+   if xonsh.platform.ON_WINDOWS:
+      locations = [r"C:\Users\Andrew\Dropbox\Winter_2019"]
+   else:
+      locations = [
+         "/home/koalasthegreat/Dropbox",
+         "/home/koalasthegreat/Code"
+      ]
    for location in locations:
       if not os.path.isdir(location):
          continue
@@ -36,7 +43,7 @@ def _work_on(args):
                return
 
 #Custom Aliases:
-if platform.system() == "Windows":
+if xonsh.platform.ON_WINDOWS:
    aliases["work"] = "cd $WORKW"
 else:
    aliases["work"] = "cd $WORK"
