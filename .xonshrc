@@ -13,7 +13,7 @@ $XONSH_SHOW_TRACEBACK=True
 $WORK = "/home/koalasthegreat/Dropbox/Winter_2019/"
 $WORKW = "C:/Users/Andrew/Dropbox/Winter_2019/"
 
-#Functions
+#Functions:
 def _markdown(file):
    file = file[0].split(".")[0]
    hercule @(file + ".md") | pandoc -o @(file + ".pdf")
@@ -26,21 +26,54 @@ def _work_on(args):
       locations = [r"C:\Users\Andrew\Dropbox\Winter_2019"]
    else:
       locations = [
-         "/home/koalasthegreat/Dropbox",
+         "/home/koalasthegreat/Dropbox/Winter_2019",
          "/home/koalasthegreat/Code"
       ]
-   for location in locations:
-      if not os.path.isdir(location):
-         continue
-      for dirpath, _, __ in os.walk(location):
-         if dirpath.endswith(name):
-            if len(args) > 1:
-               cd @(dirpath)
-               @(args[1]) @(dirpath)
-               return
-            else:
-               cd @(dirpath)
-               return
+
+   def _find(l, name):
+
+      dirs = name.split("/")
+
+      def breadthFirstFileScan(root) : # Modified from http://code.activestate.com/recipes/511456-breadth-first-file-iterator/
+         d = [root]
+         # while we have dirs to scan
+         while len(d):
+            nextDirs = []
+            for parent in d:
+               # scan each dir
+               try:
+                  for f in os.listdir(parent) :
+                     # if there is a dir, then save for next ittr, then yield it
+                     ff = os.path.join(parent, f)
+                     if os.path.isdir(ff) and not ff.startswith("."):
+                        nextDirs.append(ff)
+                        yield ff
+               except PermissionError: # if a permission error occurs, ignore it and move on
+                  pass
+
+            # once we've done all the current dirs then
+            # we set up the next itter as the child dirs 
+            # from the current itter.
+            d = nextDirs
+
+
+      for location in l:
+         if not os.path.isdir(location):
+            continue
+         for dirpath in breadthFirstFileScan(location):
+            if dirpath.endswith(dirs[0]):
+               if len(dirs) == 1:
+                  return dirpath
+               else:
+                  return _find([dirpath], "/".join(dirs[1:]))
+
+   dir = _find(locations, name)
+
+   if len(args) > 1:
+      cd @(dir)
+      @(args[1]) @(dir)
+   else:
+      cd @(dir)
 
 #Custom Aliases:
 if xonsh.platform.ON_WINDOWS:
