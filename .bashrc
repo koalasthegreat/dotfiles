@@ -56,10 +56,35 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+# http://henrik.nyh.se/2008/12/git-dirty-prompt
+# http://www.simplisticcomplexity.com/2008/03/13/show-your-git-branch-name-in-your-prompt/
+#   username@Machine ~/dev/dir [master]$   # clean working directory green
+#   username@Machine ~/dev/dir [master*]$  # dirty working directory red*
+#
+function git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+# http://unix.stackexchange.com/questions/88307/escape-sequences-with-echo-e-in-different-shells
+function markup_git_branch {
+    if [[ "x$1" = "x" ]]; then
+        echo -e "[$1]"
+    else
+        if [[ $(git status 2> /dev/null | tail -n1) = "nothing to commit, working directory clean" ]]; then
+        echo -e '\033[1;32m['"$1"']\033[0;0m'
+        else
+        echo -e '\033[1;31m['"$1"'*]\033[0;0m'
+        fi
+    fi
+    }
+
+# export PS1="\`parse_git_branch\` \u@\h:\W \\$ "
+
+
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u\[\033[01;34m\]@\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -116,5 +141,12 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Environment Variables:
-export WORK="/home/koalasthegreat/Dropbox/Winter_2019/"
+# Created by `userpath` on 2019-11-08 23:02:51
+export PATH="$PATH:/home/koalas/.local/bin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Startup Programs
+. ~/.local/bin/z.sh
